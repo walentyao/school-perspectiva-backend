@@ -3,11 +3,12 @@ import { ConfigService } from '@nestjs/config';
 import { Users } from '../users/models/users.model';
 import { Courses } from '../courses/models/courses.model';
 import { UsersCourses } from '../users/models/users-courses.model';
+import {CategoryCourses} from "../courses/models/category-courses.model";
 
 export const getPostgresConfig = async (config: ConfigService): Promise<SequelizeModuleOptions> => {
 	return {
 		dialect: 'postgres',
-		models: [Users, Courses, UsersCourses],
+		models: [Users, Courses, UsersCourses, CategoryCourses],
 		host: config.get('POSTGRES_HOST'),
 		username: config.get('POSTGRES_USERNAME'),
 		password: config.get('POSTGRES_PASSWORD'),
