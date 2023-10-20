@@ -2,18 +2,18 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { MongooseModule } from '@nestjs/mongoose';
-import { getMongoConfig } from './configs/mongo.config';
 import { UsersModule } from './users/users.module';
 import { CoursesModule } from './courses/courses.module';
+import { SequelizeModule } from '@nestjs/sequelize';
+import { getPostgresConfig } from './configs/postgres.config';
 
 @Module({
 	imports: [
 		ConfigModule.forRoot(),
-		MongooseModule.forRootAsync({
+		SequelizeModule.forRootAsync({
 			imports: [ConfigModule],
 			inject: [ConfigService],
-			useFactory: getMongoConfig,
+			useFactory: getPostgresConfig,
 		}),
 		UsersModule,
 		CoursesModule,

@@ -1,18 +1,22 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
+import { Column, Model, Table } from 'sequelize-typescript';
+import { DataTypes } from 'sequelize';
 
-export type CoursesDocument = HydratedDocument<Courses>;
-
-@Schema({ timestamps: true })
-export class Courses {
-	@Prop({ required: true })
+interface CoursesCreateAttr {
 	name: string;
-
-	@Prop({ required: true })
 	price: number;
-
-	@Prop({ required: false })
-	createdAt: string;
 }
 
-export const CoursesSchema = SchemaFactory.createForClass(Courses);
+@Table({ tableName: 'courses', timestamps: true })
+export class Courses extends Model<Courses, CoursesCreateAttr> {
+	@Column({ type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true })
+	id: number;
+
+	@Column({ type: DataTypes.STRING })
+	name: string;
+
+	@Column({ type: DataTypes.FLOAT })
+	price: number;
+
+	@Column({ type: DataTypes.DATE })
+	createdAt: string;
+}

@@ -2,7 +2,6 @@ import { Body, Controller, Get, Post } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { AddCourseUserDto } from './dto/add-course-user.dto';
-import { Types } from 'mongoose';
 
 @Controller('users')
 export class UsersController {
@@ -24,7 +23,7 @@ export class UsersController {
 	}
 
 	@Get('/courses')
-	async getCoursesUser(@Body('userId') id: Types.ObjectId) {
+	async getCoursesUser(@Body('userId') id: number) {
 		return this.userService.getCoursesUser(id);
 	}
 }
