@@ -7,9 +7,10 @@ import { CreateCategoryCoursesDto } from './dto/create-category-courses.dto';
 
 @Injectable()
 export class CoursesService {
-	constructor(@InjectModel(Courses) private coursesRepository: typeof Courses,
-							@InjectModel(CategoryCourses) private categoryCoursesRepository: typeof CategoryCourses) {
-	}
+	constructor(
+		@InjectModel(Courses) private coursesRepository: typeof Courses,
+		@InjectModel(CategoryCourses) private categoryCoursesRepository: typeof CategoryCourses,
+	) {}
 
 	async createCourse(dto: CreateCourseDto) {
 		return this.coursesRepository.create(dto);
@@ -24,12 +25,11 @@ export class CoursesService {
 	}
 
 	async getCourseByCategory(categoryId: number) {
-		const courses = await this.coursesRepository.findAll({
+		return await this.coursesRepository.findAll({
 			where: {
 				categoryId,
 			},
 		});
-		return courses
 	}
 
 	async createCategoryCourses(dto: CreateCategoryCoursesDto) {
@@ -37,6 +37,16 @@ export class CoursesService {
 	}
 
 	async getCategoryCourses() {
-		return this.categoryCoursesRepository.findAll();
+		const category = await this.categoryCoursesRepository.findAll();
+		const newResponse = [];
+		for (const item of category) {
+			const countCourses = await this.getCountCoursesInCategory(item.id);
+			newResponse.push({ ...item.dataValues, countCourses: countCourses });
+		}
+		return newResponse;
+	}
+
+	async getCountCoursesInCategory(id: number) {
+		return await this.coursesRepository.count({ where: { categoryId: id } });
 	}
 }

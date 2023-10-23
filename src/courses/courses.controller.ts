@@ -5,8 +5,7 @@ import { CreateCategoryCoursesDto } from './dto/create-category-courses.dto';
 
 @Controller('courses')
 export class CoursesController {
-	constructor(private readonly coursesService: CoursesService) {
-	}
+	constructor(private readonly coursesService: CoursesService) {}
 
 	@Post('/')
 	async createCourse(@Body() dto: CreateCourseDto) {
