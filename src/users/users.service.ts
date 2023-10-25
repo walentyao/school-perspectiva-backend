@@ -4,6 +4,7 @@ import { AddCourseUserDto } from './dto/add-course-user.dto';
 import { Users } from './models/users.model';
 import { InjectModel } from '@nestjs/sequelize';
 import { UsersCourses } from './models/users-courses.model';
+import { genSalt, hash } from 'bcryptjs';
 
 @Injectable()
 export class UsersService {
@@ -17,7 +18,13 @@ export class UsersService {
 	}
 
 	async createUser(dto: CreateUserDto) {
-		return this.usersRepository.create(dto);
+		const salt = await genSalt(10);
+		return await this.usersRepository.create({
+			email: dto.email,
+			firstName: dto.firstName,
+			lastName: dto.lastName,
+			password: await hash(dto.password, salt),
+		});
 	}
 
 	async addCourseForUser(dto: AddCourseUserDto) {

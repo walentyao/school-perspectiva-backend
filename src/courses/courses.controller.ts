@@ -1,7 +1,9 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query, UseGuards } from '@nestjs/common';
 import { CoursesService } from './courses.service';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { CreateCategoryCoursesDto } from './dto/create-category-courses.dto';
+import { JwtAuthGuard } from '../auth/guards/jwt.guard';
+import { UserEmail } from '../decorators/user-email.decorator';
 
 @Controller('courses')
 export class CoursesController {
@@ -12,8 +14,10 @@ export class CoursesController {
 		return this.coursesService.createCourse(dto);
 	}
 
+	@UseGuards(JwtAuthGuard)
 	@Get('/')
-	async getAllCourses() {
+	async getAllCourses(@UserEmail() email: string) {
+		// console.log(email);
 		return this.coursesService.getAllCourses();
 	}
 

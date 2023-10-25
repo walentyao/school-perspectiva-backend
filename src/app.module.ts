@@ -6,6 +6,7 @@ import { UsersModule } from './users/users.module';
 import { CoursesModule } from './courses/courses.module';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { getPostgresConfig } from './configs/postgres.config';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
 	imports: [
@@ -17,6 +18,7 @@ import { getPostgresConfig } from './configs/postgres.config';
 		}),
 		UsersModule,
 		CoursesModule,
+		AuthModule,
 	],
 	controllers: [AppController],
 	providers: [AppService],
