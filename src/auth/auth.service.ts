@@ -1,16 +1,14 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
-import { InjectModel } from '@nestjs/sequelize';
-import { Users } from '../users/models/users.model';
 import { compare } from 'bcryptjs';
 import { USER_NOT_FOUND, WRONG_PASSWORD_ERROR } from './auth.constans';
 import { JwtService } from '@nestjs/jwt';
+import { AuthRegisterDto } from './dto/auth-register.dto';
 
 @Injectable()
 export class AuthService {
 	constructor(
 		private readonly usersService: UsersService,
-		@InjectModel(Users) private readonly userRepository: typeof Users,
 		private readonly jwtService: JwtService,
 	) {}
 
@@ -33,5 +31,11 @@ export class AuthService {
 		return {
 			access_token: await this.jwtService.signAsync(payload),
 		};
+	}
+
+	async register(dto: AuthRegisterDto) {
+		const newUser = await this.usersService.createUser(dto);
+		if (newUser)
+			return { user: newUser, access_token: await this.jwtService.signAsync(newUser.email) };
 	}
 }
